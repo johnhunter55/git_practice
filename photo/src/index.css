@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
+/* src/index.css */
+:root {
+  font-family: Google Sans, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 0;
+  font-weight: 400;
+
+  /* This sets up a default dark/light mode variable system */
+  color-scheme: light dark;
+  color: oklch(97.9% 0.021 166.113);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* Removed "display: flex" and "place-items: center" so your gallery starts at the top */
+}
+
+a {
+  text-decoration: none;
+  color: oklch(97.9% 0.021 166.113);
+}
+
+/* Style for header icon buttons */
+header button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  /* Makes the hover effect a circle */
+  transition: background 0.2s;
+}
+
+header button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  /* Subtle light hover */
+}
+
+/* Keeps the light mode background white if the user's computer is in light mode */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
