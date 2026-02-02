@@ -24,16 +24,20 @@ export default function Auth({ pb, onLogin }) {
     }
 
     return (
-        <div className="login-container">
-            <h2>Client Login</h2>
-            <form onSubmit={handleSubmit}>
-                <input type="email" name="email" placeholder="Email" required />
-                <input type="password" name="password" placeholder="Password" required />
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Logging in...' : 'Enter Gallery'}
-                </button>
-            </form>
-            {error && <p className="error">{error}</p>}
-        </div>
+        <div className="back-log-container">
+            <div className="login-container">
+                <h2>Login</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="log-inputs">
+                        <input type="email" name="email" placeholder="Email" required />
+                        <input type="password" name="password" placeholder="Password" required />
+                        <button type="submit" disabled={loading}>
+                            {loading ? 'Logging in...' : 'Enter Gallery'}
+                        </button>
+                    </div>
+                </form>
+                {error && <p className="error">{error}</p>}
+            </div >
+        </div >
     )
 }

@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import PocketBase from 'pocketbase'
+import { MasonryPhotoAlbum } from "react-photo-album";
+import "react-photo-album/masonry.css";
 import Auth from './Auth'
 import './App.css'
 
+// 1. Initialize PocketBase
 const pb = new PocketBase('http://127.0.0.1:8090')
 
 function App() {
@@ -15,6 +18,7 @@ function App() {
     setUser(null)
   }
 
+  // 2. Fetch photos from PocketBase
   useEffect(() => {
     if (!user) return;
 
@@ -31,12 +35,22 @@ function App() {
     fetchData()
   }, [user])
 
+  // 3. Transform PocketBase data for the Album library
+  // We explicitly create this array so the library understands your data
+  const albumPhotos = photos.map(photo => ({
+    src: pb.files.getUrl(photo, photo.image),
+    // Since we don't have real dimensions in the DB yet, we use a placeholder.
+    // Masonry handles this better than Rows, but it will look like a strict grid
+    // until you save real width/height data.
+    width: 400,
+    height: 400,
+    original: photo // Keep the original object for the Lightbox
+  }));
+
   return (
     <div className="gallery-container">
-
       {user && (
         <header>
-          {/* Fixed 'class' to 'className' for React */}
           <button className="material-symbols-outlined">menu</button>
           <h1>My Photo Gallery</h1>
           <button onClick={logout} className="logout-btn material-symbols-outlined">logout</button>
@@ -45,25 +59,24 @@ function App() {
 
       {user ? (
         <>
-          <div className="photo-grid">
-            {photos.map((photo) => {
-              const thumbUrl = pb.files.getUrl(photo, photo.image, { 'thumb': '480x0' })
-
-              return (
-                <div
-                  key={photo.id}
-                  className="photo-card"
-                  onClick={() => setSelectedPhoto(photo)}
-                >
-                  <img src={thumbUrl} alt="Gallery Thumbnail" loading="lazy" />
-                </div>
-              )
-            })}
+          <div className="photo-grid-container">
+            {/* 4. THE MASONRY ALBUM */}
+            <MasonryPhotoAlbum
+              photos={albumPhotos}
+              columns={(containerWidth) => {
+                // This makes the columns dynamic based on screen size
+                if (containerWidth < 400) return 1;
+                if (containerWidth < 800) return 2;
+                return 3;
+              }}
+              spacing={10}
+              onClick={({ event, photo }) => {
+                setSelectedPhoto(photo.original)
+              }}
+            />
           </div>
 
-          {/* --- NEW LIGHTBOX CODE STARTS HERE --- */}
-          {/* ... inside App function ... */}
-
+          {/* 5. Lightbox (Full Screen View) */}
           {selectedPhoto && (() => {
             const currentIndex = photos.findIndex(p => p.id === selectedPhoto.id)
             const nextPhoto = photos[(currentIndex + 1) % photos.length]
@@ -71,19 +84,13 @@ function App() {
 
             return (
               <div className="lightbox" onClick={() => setSelectedPhoto(null)}>
-
-                {/* Content Box */}
                 <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-
-                  {/* NEW: Wrapper makes buttons stick to the image size */}
                   <div className="image-wrapper">
-
                     <img
                       src={pb.files.getUrl(selectedPhoto, selectedPhoto.image)}
                       alt="Full Screen"
                     />
 
-                    {/* 1. TOP RIGHT ICONS (Show when hovering anywhere on photo) */}
                     <div className="lightbox-header">
                       <a
                         href={pb.files.getUrl(selectedPhoto, selectedPhoto.image) + "?download=1"}
@@ -98,7 +105,6 @@ function App() {
                       </button>
                     </div>
 
-                    {/* 2. LEFT ARROW (Shows only when hovering Left Side) */}
                     <button
                       className="nav-btn left"
                       onClick={(e) => {
@@ -109,7 +115,6 @@ function App() {
                       <span className="material-symbols-outlined">chevron_left</span>
                     </button>
 
-                    {/* 3. RIGHT ARROW (Shows only when hovering Right Side) */}
                     <button
                       className="nav-btn right"
                       onClick={(e) => {
@@ -119,7 +124,6 @@ function App() {
                     >
                       <span className="material-symbols-outlined">chevron_right</span>
                     </button>
-
                   </div>
                 </div>
               </div>
