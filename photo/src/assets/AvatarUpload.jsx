@@ -2,7 +2,6 @@ import { useState } from 'react'; // Don't forget this import!
 
 export default function AvatarUpload({ user, pb, setUser }) {
     const [uploading, setUploading] = useState(false);
-    const [user, setUser] = useState(pb.authStore.model);
 
     const handleUpload = async (e) => {
         setUploading(true);
