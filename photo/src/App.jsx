@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import PocketBase from 'pocketbase'
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, color } from "framer-motion";
 import Auth from './Auth'
 import './App.css'
+import AvatarUpload from './assets/AvatarUpload.jsx'
 
 // Initialize PocketBase
 const pb = new PocketBase('http://127.0.0.1:8090')
@@ -44,6 +45,8 @@ function App() {
 
   const [userList, setUserList] = useState([])
   const [viewingUser, setViewingUser] = useState(null)
+
+  const [profileOpen, setProfileOpen] = useState(false);
 
   function logout() {
     pb.authStore.clear()
@@ -123,7 +126,6 @@ function App() {
     }
   };
 
-  // --- NEW: LOGIC TO GET THE TITLE ---
   // We look through userList to find the name of the person we are watching
   const getCurrentTitle = () => {
     if (viewingUser === user.id) return "My Photo Gallery";
@@ -141,17 +143,42 @@ function App() {
 
     return "User Gallery";
   };
-  // ------------------------------------
 
   return (
     <div className="gallery-container">
       {user && (
         <header>
           <div className="header">
-            <button className="material-symbols-outlined">menu</button>
+            <div style={{ position: 'relative' }}>
+              <div
+                className="profile-bubble"
+                onClick={() => setProfileOpen(!profileOpen)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="profile-image">
+                  <img
+                    src={pb.files.getURL(user, user.avatar)}
+                    alt="User Avatar"
+                  /></div>
+                <div className="profile-info">
+                  <span className='username'>{user.name}</span>
+                  <span className="user-subtitle">{user.title || "Model"}</span>
+                </div>
+              </div>
+              {/* THE MENU: Only shows if profileOpen is true */}
+              {profileOpen && (
+                <div className="dropdown-content1">
+                  <div className="dropdown-header">User Settings</div>
+                  <AvatarUpload user={user} pb={pb} setUser={setUser} />
+                  <div onClick={logout} className='logout-container'>
+                    <span className="logout-btn material-symbols-outlined logoutbutton">logout</span>
+                    <h2 className='logout-title'>Logout</h2>
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="dropdown">
               <button className="main-button">
-                {/* USE THE NEW FUNCTION HERE */}
                 {getCurrentTitle()}
                 <span className="material-symbols-outlined" style={{ fontSize: '1rem', marginLeft: '5px' }}>arrow_drop_down</span>
               </button>
@@ -205,7 +232,6 @@ function App() {
                   disabled={uploading}
                 />
               </label>
-              <button onClick={logout} className="logout-btn material-symbols-outlined">logout</button>
             </div>
           </div>
 

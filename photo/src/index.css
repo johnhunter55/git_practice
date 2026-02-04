@@ -21,7 +21,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  /* Removed "display: flex" and "place-items: center" so your gallery starts at the top */
+  width: 100%;
 }
 
 a {

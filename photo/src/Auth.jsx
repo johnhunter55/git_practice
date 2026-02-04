@@ -15,7 +15,7 @@ export default function Auth({ pb, onLogin }) {
             email: e.target.email.value,
             password: e.target.password.value,
             passwordConfirm: e.target.passwordConfirm?.value,
-            name: e.target.name?.value, // Optional: Capture name if you want
+            name: e.target.name?.value,
         }
 
         try {
@@ -78,10 +78,9 @@ export default function Auth({ pb, onLogin }) {
                         }}
                         style={{
                             background: 'none',
-                            color: '#4dabf7',
+                            color: 'oklch(76.9% 0.188 70.08)',
                             border: 'none',
                             cursor: 'pointer',
-                            textDecoration: 'underline',
                             marginLeft: '5px',
                             width: 'auto',
                             padding: 0,
