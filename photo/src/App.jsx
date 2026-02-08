@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import PocketBase from 'pocketbase'
 import { motion, AnimatePresence, color } from "framer-motion";
 import Auth from './Auth'
@@ -6,7 +6,7 @@ import './App.css'
 import AvatarUpload from './assets/AvatarUpload.jsx'
 
 // Initialize PocketBase
-const pb = new PocketBase('http://127.0.0.1:8090')
+const pb = new PocketBase('https://model.john5bb.com')
 pb.autoCancellation(false);
 
 // Animation Config
@@ -53,6 +53,24 @@ function App() {
     setUser(null)
     setViewingUser(null)
   }
+  const menuRef = useRef();
+  useEffect(() => {
+    // 1. Define the check function
+    let handler = (e) => {
+      // If the menu is NOT open, or the click is INSIDE the menu, do nothing.
+      if (!menuRef.current.contains(e.target)) {
+        setProfileOpen(false); // Close it!
+      }
+    };
+
+    // 2. Add the listener to the whole page
+    document.addEventListener("mousedown", handler);
+
+    // 3. Cleanup (Remove listener when we leave)
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  });
 
   // 1. Fetch Users
   useEffect(() => {
@@ -149,7 +167,7 @@ function App() {
       {user && (
         <header>
           <div className="header">
-            <div style={{ position: 'relative' }}>
+            <div ref={menuRef} style={{ position: 'relative' }}>
               <div
                 className="profile-bubble"
                 onClick={() => setProfileOpen(!profileOpen)}
