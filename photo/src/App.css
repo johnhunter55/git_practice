@@ -1,517 +1,223 @@
 /* src/App.css */
+
+/* --- 1. GLOBAL VARIABLES & RESET --- */
+:root {
+  --bg-color: #0f0f11;
+  --surface-glass: rgba(20, 20, 20, 0.7);
+  --border-glass: rgba(255, 255, 255, 0.1);
+  --accent-color: #3b82f6;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --danger-color: #ef4444;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent highlighting UI elements */
+.header,
+.lightbox,
+.masonry-item {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar (Desktop) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+html {
+  scrollbar-width: thin;
+}
+
+/* --- 2. LAYOUT & GRID --- */
 .gallery-container {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
-  box-sizing: border-box;
-  width: 98%;
-  margin-top: 10px;
-}
-
-.back-log-container {
-  display: flex;
-  height: 100vh;
   width: 100%;
-  justify-content: center;
-  align-items: center;
+  padding-bottom: 100px;
 }
 
-.main-button {
-  font-size: 1.4em;
+.masonry-grid {
+  column-count: 3;
+  column-gap: 10px;
+  width: 96%;
+  margin: 0 auto;
 }
 
-.main-button:hover {
-  background-color: rgba(0, 0, 0, 0);
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 10px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #1a1a1a;
 }
 
-.log-inputs {
+.photo-img {
+  width: 100%;
+  display: block;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+.photo-img:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+/* --- 3. HEADER (Glassmorphism) --- */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 0;
+  margin-bottom: 20px;
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.header {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 24px;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.log-inputs input {
-  width: 50%;
-  height: 30px;
+/* Profile */
+.profile-dropdown {
+  position: relative;
+  z-index: 102;
+}
+
+.login-subtitle {
+  margin: 50px 0;
+}
+
+/* --- 8. SETTINGS TOGGLE --- */
+.visibility-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.visibility-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.toggle-label {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* The Switch Component */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #3f3f46;
+  /* Inactive Gray */
+  transition: .3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Checked State */
+input:checked+.slider {
+  background-color: var(--accent-color);
+}
+
+input:checked+.slider:before {
+  transform: translateX(20px);
 }
 
 .profile-bubble {
   display: flex;
   align-items: center;
-  min-width: 100px;
-  max-width: 200px;
-  height: 70px;
-  background-color: #414141;
-  border-radius: 35px;
-  padding-left: 5px;
-  padding-right: 22px;
   gap: 10px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
-.username {
-  font-size: 1.3em;
-}
-
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  height: 50px;
-  gap: 8px;
-  padding-top: 4px;
+.profile-bubble:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .user-subtitle {
-  font-size: 0.9em;
-  font-weight: 200;
-  color: grey;
-}
-
-.profile-image img {
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 10px;
-}
-
-h1 {
-  text-align: center;
-  font-size: 2em;
-  font-weight: 500;
-}
-
-/* ... existing styles ... */
-
-.masonry-grid {
-  column-count: 3;
-  column-gap: 15px;
-}
-
-.masonry-item {
-  break-inside: avoid;
-  margin-bottom: 15px;
-  /* Removed cursor: pointer from here */
-}
-
-/* Added specific class for the image */
-.photo-img {
-  width: 100%;
-  border-radius: 8px;
-  display: block;
-  transition: transform 0.2s;
-  cursor: pointer;
-  /* Pointer only shows when hovering the image */
-}
-
-.photo-img:hover {
-  transform: scale(1.02);
-}
-
-/* Responsive: 2 columns on tablets */
-@media (max-width: 800px) {
-  .masonry-grid {
-    column-count: 2;
-  }
-}
-
-/* Responsive: 1 column on phones */
-@media (max-width: 500px) {
-  .masonry-grid {
-    column-count: 1;
-  }
-}
-
-/* The Dark Overlay */
-.lightbox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85);
-  /* Slightly more transparent */
-  backdrop-filter: blur(10px);
-  /* THE COOL BLUR EFFECT */
-  /* 90% opacity black */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* The Full Image */
-.lightbox img {
-  max-width: 90vw;
-  max-height: 90vh;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  border-radius: 4px;
-}
-
-/* Make thumbnails look clickable */
-.photo-card {
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.photo-card:hover {
-  transform: scale(1.02);
-}
-
-/* 1. The Container that hugs the image tightly */
-.image-wrapper {
-  position: relative;
-  /* Allows buttons to sit inside */
-  display: inline-block;
-  /* Shrinks to fit the image width */
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-/* Ensure image defines the size */
-.image-wrapper img {
-  display: block;
-  max-width: 100%;
-  max-height: 90vh;
-  /* Keeps it from getting too tall */
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-
-/* 2. TOP RIGHT ICONS */
-.lightbox-header {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  gap: 8px;
-  opacity: 0;
-  /* HIDDEN by default */
-  transition: opacity 0.2s ease-in-out;
-  z-index: 20;
-}
-
-/* SHOW Top Right icons when hovering ANYWHERE on the wrapper */
-.image-wrapper:hover .lightbox-header {
-  opacity: 1;
-}
-
-/* 3. ARROWS (The Invisible 50% Zones) */
-.nav-btn {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  /* Covers half the image */
-  background: transparent;
-  /* The container itself is invisible */
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-
-  /* This centers the circle vertically */
-  display: flex;
-  align-items: center;
-
-  /* Remove any default opacity transitions on the container */
-  transition: none;
-}
-
-/* Position the Zones */
-.nav-btn.left {
-  left: 0;
-  justify-content: flex-start;
-  /* Aligns circle to the left edge */
-  padding-left: 10px;
-  /* Spacing from the wall */
-}
-
-.nav-btn.right {
-  right: 0;
-  justify-content: flex-end;
-  /* Aligns circle to the right edge */
-  padding-right: 10px;
-  /* Spacing from the wall */
-}
-
-/* 4. THE VISIBLE CIRCLE (The Icon Inside) */
-.nav-btn span {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-
-  background: rgba(0, 0, 0, 0.5);
-  /* The Dark Circle */
-  color: white;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* Hidden by default */
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* 5. THE INTERACTION (Two-Step Hover) */
-
-/* STEP 1: When hovering the huge invisible zone -> Show the arrow (Light) */
-.nav-btn:hover span {
-  opacity: 1;
-  transform: scale(1);
-  background: rgba(0, 0, 0, 0.5);
-  /* Standard semi-transparent black */
-}
-
-/* STEP 2: When hovering the ACTUAL CIRCLE -> Make it Darker & Bigger */
-/* Note: We target the 'span' specifically here */
-.nav-btn span:hover {
-  background: rgba(0, 0, 0, 0.9) !important;
-  /* Pure black, overrides the rule above */
-  transform: scale(1.15) !important;
-  /* Grow slightly bigger */
-  cursor: pointer;
-  /* Reinforce that this is the clickable part */
-}
-
-.nav-btn span.material-symbols-outlined {
-  font-size: 32px;
-}
-
-/* Icon Styles */
-.icon-btn {
-  background: rgba(0, 0, 0, 0.5);
-  /* Semi-transparent black backing */
-  border-radius: 50%;
-  color: white;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  display: flex;
-}
-
-.icon-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.nav-btn .material-symbols-outlined {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-  /* Shadow makes arrow pop */
-}
-
-/* DROPDOWN STYLES */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  /* Hidden by default */
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #242424;
-  /* Darker grey */
-  min-width: 220px;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.5);
-  z-index: 100;
-  border-radius: 8px;
-  border: 1px solid #333;
-  padding: 8px 0;
-  animation: fadeIn 0.2s ease;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-/* Header inside dropdown (Label) */
-.dropdown-header {
-  padding: 8px 16px;
-  font-size: 1rem;
-  text-transform: uppercase;
-  color: #888;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
-}
-
-/* Individual Items */
-.dropdown-item {
-  color: #e0e0e0;
-  padding: 10px 16px;
-  margin: 5px 0;
-  text-decoration: none;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.1s;
-  font-size: 1rem;
-  font-weight: 200;
-}
-
-.dropdown-item:hover {
-  background-color: #333;
-}
-
-/* The selected user gets a blue tint */
-.dropdown-item.active {
-  background-color: rgba(37, 99, 235, 0.2);
-  /* Transparent Blue */
-  color: #60a5fa;
-  /* Light Blue Text */
-  border-left: 3px solid #60a5fa;
-}
-
-/* Divider Line */
-.dropdown-divider {
-  height: 1px;
-  background-color: #333;
-  margin: 6px 0;
-}
-
-/* Update header-left to group button and menu icon */
-.header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-/* Add this to align the Upload and Logout buttons side-by-side */
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  /* Spacing between the buttons */
-}
-
-/* Update the upload-btn to look exactly like a button */
-.upload-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background 0.2s;
-
-  /* NEW: This centers the icon inside the circle */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: inherit;
-  /* Matches the text color */
-}
-
-.upload-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Make the parent container span the full screen to center the box */
-.login-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-/* The Modal Box itself */
-.login-container {
-  width: 100%;
-  max-width: 350px;
-  background-color: #191919;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 5px 8px 15px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-/* Form Elements */
-.login-container h2 {
-  margin-bottom: 20px;
-  color: white;
-}
-
-.login-container input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  background-color: #242424;
-  border: 1px solid #171717;
-  border-radius: 6px;
-  color: white;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.login-container input:hover {
-  background-color: #373737;
-  ;
-}
-
-.login-container input:focus-within {
-  outline: 2px solid oklch(43.2% 0.095 166.913);
-
-  background-color: #2f2f2f;
-}
-
-
-.login-container button {
-  width: 100%;
-  padding: 12px;
-  background-color: oklch(43.2% 0.095 166.913);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.login-container button:hover {
-  background-color: oklch(37.8% 0.077 168.94);
-}
-
-.error {
-  color: #ef4444;
-  font-size: 0.9rem;
-  margin-top: 10px;
-}
-
-.dropdown-content1 {
-  position: absolute;
-  /* <--- This is the key! */
-  top: 100%;
-  /* Pushes it to the bottom of the profile bubble */
-  right: -45px;
-  /* Aligns it to the right edge */
-  margin-top: 10px;
-  z-index: 9999;
-  /* Forces it to be on top of EVERYTHING */
-  background-Color: #222;
-  /* Dark background so text is readable */
-  min-Width: 180px;
-  /* Ensures it's not too skinny */
-  padding: 10px;
-  border-Radius: 8px;
-  box-Shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  border: 1px solid #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-top: -2px;
 }
 
 .logout-container {
@@ -519,33 +225,457 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 100%;
-}
-
-.change {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 5px 0;
-}
-
-.change:hover {
-  background-color: rgb(52, 52, 52);
+  padding: 2px;
+  color: red;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 0;
 }
 
 .logout-container:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.profile-image img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.username {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+/* Triggers */
+.profile-dropdown:hover .dropdown-content1,
+.profile-dropdown:focus-within .dropdown-content1 {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* FIX: This makes the React state 'filterOpen' work */
+.dropdown.active .dropdown-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Menus */
+.dropdown-content,
+.dropdown-content1 {
+  position: absolute;
+  top: 120%;
+  background: #1c1c1e;
+  min-width: 220px;
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--border-glass);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 1000;
+}
+
+.dropdown-content1 {
+  left: 0;
+}
+
+.dropdown-content {
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+/* Default Hover Behavior (Fallback) */
+.dropdown:hover .dropdown-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dropdown-header {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  color: white;
+  border-radius: 8px;
   cursor: pointer;
-  background-color: rgb(58, 39, 39);
+  transition: background 0.1s;
 }
 
-.logout-title {
-  font-weight: 100;
-  font-size: 1.1em;
-  color: rgb(255, 156, 156);
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.logoutbutton {
-  color: rgb(255, 156, 156);
+.dropdown-item.active {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent-color);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 6px 0;
+}
+
+/* Buttons */
+.main-button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.main-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.upload-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.upload-btn:hover {
+  transform: scale(1.05);
+}
+
+/* --- 4. LIGHTBOX --- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.98);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.responsive-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  padding: 40px 100px;
+  box-sizing: border-box;
+}
+
+.lightbox-img-shared {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.lightbox-thumb {
+  grid-area: 1 / 1;
+  filter: blur(20px);
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.react-transform-wrapper {
+  grid-area: 1 / 1;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.react-transform-component {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- 5. CONTROLS --- */
+.lightbox-header {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(40, 40, 40, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px;
+  border-radius: 40px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 50;
+}
+
+.responsive-container:hover .lightbox-header {
+  opacity: 1;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 15%;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.nav-btn:hover {
+  opacity: 1;
+}
+
+.nav-btn.left {
+  left: 0;
+  padding-left: 20px;
+}
+
+.nav-btn.right {
+  right: 0;
+  justify-content: flex-end;
+  padding-right: 20px;
+}
+
+.nav-btn span {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+}
+
+/* Landscape Mobile/Short Screens */
+@media (max-height: 600px) {
+  .responsive-container {
+    padding: 10px 80px;
+  }
+}
+
+/* --- 6. MOBILE OVERRIDES --- */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 16px;
+  }
+
+  .profile-info {
+    display: none;
+  }
+
+  .nav-btn {
+    display: none;
+  }
+
+  /* Mobile Layout: 40px padding top/sides, 140px bottom */
+  .responsive-container {
+    padding: 0;
+  }
+
+  .lightbox-header {
+    top: auto;
+    bottom: 40px;
+    right: 50%;
+    transform: translateX(50%);
+    opacity: 1 !important;
+    width: auto;
+    min-width: 140px;
+    background: rgba(30, 30, 30, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 54px;
+    align-items: center;
+  }
+
+  .icon-btn span {
+    font-size: 1.5rem;
+  }
+}
+
+/* --- 7. UTILS --- */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.delete-btn-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.masonry-item:hover .delete-btn-overlay {
+  opacity: 1;
+}
+
+.delete-btn-overlay span {
+  font-size: 20px;
+  color: white;
+}
+
+.login-wrapper,
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.modal-title {
+  padding-bottom: 10px;
+}
+
+.login-container,
+.delete-modal {
+  background: #18181b;
+  border: 1px solid var(--border-glass);
+  padding: 32px;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 14px;
+  background: #27272a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent-color);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+/* --- 6. MOBILE OVERRIDES --- */
+@media (max-width: 768px) {
+
+  /* CHANGE: Force 2 columns on mobile instead of 1 */
+  .masonry-grid {
+    column-count: 2;
+    column-gap: 5px;
+    /* Slightly tighter gap for mobile looks better */
+  }
+
+  .masonry-item {
+
+    margin-bottom: 5px;
+
+  }
 }

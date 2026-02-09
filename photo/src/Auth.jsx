@@ -44,12 +44,14 @@ export default function Auth({ pb, onLogin }) {
     return (
         <div className="login-wrapper">
             <div className="login-container">
-                <h2>{isLogin ? 'Client Login' : 'Create Account'}</h2>
-
+                <h2>{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+                <p className="login-subtitle">
+                    {isLogin ? 'Enter your details to access the gallery.' : 'Sign up to start sharing your photos.'}
+                </p>
                 <form onSubmit={handleSubmit}>
                     {/* Name field (Only for Sign Up) */}
                     {!isLogin && (
-                        <input type="text" name="name" placeholder="Full Name (Optional)" />
+                        <input type="text" name="name" placeholder="User Name" />
                     )}
 
                     <input type="email" name="email" placeholder="Email" required />

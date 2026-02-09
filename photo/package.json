@@ -14,7 +14,8 @@
     "pocketbase": "^0.26.8",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-photo-album": "^3.4.0"
+    "react-photo-album": "^3.4.0",
+    "react-zoom-pan-pinch": "^3.7.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
